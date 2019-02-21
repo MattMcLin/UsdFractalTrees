@@ -1,0 +1,9 @@
+#ifndef _VERSION_H_
+#define _VERSION_H_
+
+// the configured options and settings for Tutorial
+#define UsdFractalTrees_VERSION_MAJOR @UsdFractalTrees_VERSION_MAJOR@
+#define UsdFractalTrees_VERSION_MINOR @UsdFractalTrees_VERSION_MINOR@
+#define UsdFractalTrees_VERSION_PATCH @UsdFractalTrees_VERSION_PATCH@
+
+#endif
