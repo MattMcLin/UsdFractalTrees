@@ -1,7 +1,21 @@
 #include "Version.h"
 #include <stdio.h>
+#include <string>
 
 #include "pxr/usd/usd/stage.h"
+#include "pxr/base/arch/systemInfo.h"
+#include "pxr/base/plug/registry.h"
+
+class InitUSDPluginPath {
+public:
+    InitUSDPluginPath() {
+        std::string dir = pxr::TfGetPathName(pxr::ArchGetExecutablePath());
+        std::string pluginDir = pxr::TfStringCatPaths(dir, "/usd/");
+        pxr::PlugRegistry::GetInstance().RegisterPlugins(pluginDir);
+    }
+};
+// constructor runs once to set USD plugin path (must be done early)
+static InitUSDPluginPath getUSDPlugInPathSet;
 
 int main(int argc, char* argv[])
 {
