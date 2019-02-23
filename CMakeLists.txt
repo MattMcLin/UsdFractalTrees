@@ -15,11 +15,14 @@ set (${PROJECT_NAME}_VERSION_PATCH 0)
 set(USD_INSTALL_DIR "d:/git/3rdparty/USD")
 set(PYTHON_INSTALL_DIR "d:/Python27")
 
-set(USD_LIB_DIR ${USD_LIB_DIR}/lib)
-set(PYTHON_LIB_DIR ${PYTHON_INSTALL_DIR}/libs)
-set(USD_INCLUDE_DIR ${USD_LIB_DIR}/include)
-set(BOOST_INCLUDE_DIR ${USD_LIB_DIR}/include/boost-1_61)
-set(PYTHON_INCLUDE_DIR ${PYTHON_INSTALL_DIR}/include)
+message(STATUS "USD_INSTALL_DIR=${USD_INSTALL_DIR}")
+message(STATUS "PYTHON_INSTALL_DIR=${PYTHON_INSTALL_DIR}")
+
+set(USD_LIB_DIR "${USD_INSTALL_DIR}/lib")
+set(PYTHON_LIB_DIR "${PYTHON_INSTALL_DIR}/libs")
+set(USD_INCLUDE_DIR "${USD_INSTALL_DIR}/include")
+set(BOOST_INCLUDE_DIR "${USD_INSTALL_DIR}/include/boost-1_61")
+set(PYTHON_INCLUDE_DIR "${PYTHON_INSTALL_DIR}/include")
 
 if (WIN32)
 	add_compile_definitions(_WIN64=1)
@@ -52,13 +55,12 @@ set (${PROJECT_NAME}_SOURCES
 )
 
 add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCES})
-target_link_libraries(${PROJECT_NAME} usd sdf tf arch plug)
+target_link_libraries(${PROJECT_NAME} usd sdf tf arch plug usdGeom vt gf)
 
 install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_BINARY_DIR}/bin)
 
 # install the various binaries and libraries needed for the application bundle
 install(FILES 
-	${USD_LIB_DIR}/libusd.dll
 	${USD_LIB_DIR}/libarch.dll
 	${USD_LIB_DIR}/libar.dll
 	${USD_LIB_DIR}/libgf.dll
@@ -69,6 +71,8 @@ install(FILES
 	${USD_LIB_DIR}/libsdf.dll
 	${USD_LIB_DIR}/libtf.dll
 	${USD_LIB_DIR}/libtrace.dll
+	${USD_LIB_DIR}/libusd.dll
+	${USD_LIB_DIR}/libusdGeom.dll
 	${USD_LIB_DIR}/libvt.dll
 	${USD_LIB_DIR}/libwork.dll
 	${USD_LIB_DIR}/boost_python-vc140-mt-1_61.dll
