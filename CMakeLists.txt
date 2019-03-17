@@ -1,5 +1,7 @@
 cmake_minimum_required (VERSION 3.0)
 
+set (CMAKE_CXX_STANDARD 11)
+
 # CMP0048 required so that we can specify the version of our project
 if (POLICY CMP0048)
   cmake_policy(SET CMP0048 NEW)
@@ -11,18 +13,18 @@ set (${PROJECT_NAME}_VERSION_MAJOR 0)
 set (${PROJECT_NAME}_VERSION_MINOR 1)
 set (${PROJECT_NAME}_VERSION_PATCH 0)
 
+find_package(Python2 2.7 COMPONENTS Development)
+
  # FIXME: you will need to update these hard-coded paths to your USD and Python install directories
-set(USD_INSTALL_DIR "d:/git/3rdparty/USD")
-set(PYTHON_INSTALL_DIR "d:/Python27")
+set(USD_INSTALL_DIR $ENV{USD_INSTALL_DIR})
 
 message(STATUS "USD_INSTALL_DIR=${USD_INSTALL_DIR}")
-message(STATUS "PYTHON_INSTALL_DIR=${PYTHON_INSTALL_DIR}")
+message(STATUS "Python2_Development_FOUND=${Python2_Development_FOUND}")
+message(STATUS "Python libs=${Python2_LIBRARY_DIRS}")
 
 set(USD_LIB_DIR "${USD_INSTALL_DIR}/lib")
-set(PYTHON_LIB_DIR "${PYTHON_INSTALL_DIR}/libs")
 set(USD_INCLUDE_DIR "${USD_INSTALL_DIR}/include")
 set(BOOST_INCLUDE_DIR "${USD_INSTALL_DIR}/include/boost-1_61")
-set(PYTHON_INCLUDE_DIR "${PYTHON_INSTALL_DIR}/include")
 
 if (WIN32)
 	add_compile_definitions(_WIN64=1)
@@ -42,20 +44,22 @@ include_directories(
 	${PROJECT_BINARY_DIR}
 	${USD_INCLUDE_DIR}
 	${BOOST_INCLUDE_DIR}
-	${PYTHON_INCLUDE_DIR}
+	${Python2_INCLUDE_DIRS}
 	)
 	
 link_directories(
 	${USD_LIB_DIR}
-	${PYTHON_LIB_DIR}
+	${Python2_LIBRARY_DIRS}
 )
   
 set (${PROJECT_NAME}_SOURCES
+    src/branch.cpp
+    src/branch.hpp
 	src/main.cpp
 )
 
 add_executable(${PROJECT_NAME} ${${PROJECT_NAME}_SOURCES})
-target_link_libraries(${PROJECT_NAME} usd sdf tf arch plug usdGeom vt gf)
+target_link_libraries(${PROJECT_NAME} boost_python python2.7 usd sdf tf arch plug usdGeom vt gf)
 
 install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_BINARY_DIR}/bin)
 
